@@ -1,16 +1,23 @@
+import React, { Component } from 'react'
+
 import Hangman from './Hangman';
+import WordToGuess from './WordToGuess';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <div className="hangman">
-          <Hangman errorNumber={4}/>
+class App extends Component {
+
+  render() {
+    return (
+      <div className="App" >
+        <div className="App-header">
+          <div className="hangman">
+            <Hangman errorNumber={6} />
+          </div>
         </div>
-      </header>
-    </div>
-  );
+        <WordToGuess />
+      </div>
+    )
+  }
 }
 
 export default App;
