@@ -7,8 +7,13 @@ import './App.css';
 class App extends Component {
 
   state = {
-    lettersPressed: ['a', 'n'],
+    lettersPressed: [],
     alphabet: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
+  }
+
+  getLettersPressed = () => {
+    const { lettersPressed } = this.state
+    return lettersPressed
   }
 
   handleKeyDown = (e) => {
@@ -17,13 +22,13 @@ class App extends Component {
     if (alphabet.includes(e.key) && !array.includes(e.key)) {
       array.push(e.key)
       this.setState({ lettersPressed: array })
-      console.log(e.key)
-      console.log(lettersPressed)
+      this.getLettersPressed()
     }
   }
 
 
   componentDidMount() {
+    this.getLettersPressed()
     document.addEventListener('keydown', this.handleKeyDown)
   }
 
@@ -39,7 +44,7 @@ class App extends Component {
             <Hangman errorNumber={6} />
           </div>
         </div>
-        <WordToGuess lettersProposed={this.state.lettersPressed} />
+        <WordToGuess lettersProposed={this.getLettersPressed()} />
       </div>
     )
   }

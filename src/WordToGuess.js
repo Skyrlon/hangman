@@ -1,4 +1,4 @@
-const wordToGuess = 'Hangman';
+const wordToGuess = 'hangman';
 const lettersOfWordToGuess = wordToGuess.split('');
 
 const WordToGuess = ({ lettersProposed }) => (
