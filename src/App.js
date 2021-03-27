@@ -9,6 +9,7 @@ class App extends Component {
 
   state = {
     wordToGuess: 'hangman',
+    wordFound: undefined,
     lettersPressed: [],
     correctLetters: [],
     incorrectLetters: [],
@@ -18,18 +19,35 @@ class App extends Component {
 
   updateState = (x) => {
     const { wordToGuess } = this.state
+    const uniqueLettersOfWordToGuess = [...new Set(wordToGuess)]
     this.setState({
       lettersPressed: x,
-      correctLetters: x.filter(letter => wordToGuess.split('').includes(letter)),
-      incorrectLetters: x.filter(letter => !wordToGuess.split('').includes(letter)),
-      errors: x.filter(letter => !wordToGuess.split('').includes(letter)).length
+      correctLetters: x.filter(letter => uniqueLettersOfWordToGuess.includes(letter)),
+      incorrectLetters: x.filter(letter => !uniqueLettersOfWordToGuess.includes(letter)),
+      errors: x.filter(letter => !uniqueLettersOfWordToGuess.includes(letter)).length
+    })
+    this.statusOfTheGame(uniqueLettersOfWordToGuess)
+  }
+
+  statusOfTheGame = (x) => {
+    const { correctLetters, incorrectLetters } = this.state
+    let win
+    if (correctLetters.length === x.length) {
+      win = true
+    } else if (incorrectLetters.length >= 6) {
+      win = false
+    } else {
+      win = undefined
+    }
+    this.setState({
+      wordFound: win,
     })
   }
 
   handleKeyDown = (e) => {
-    const { lettersPressed, alphabet } = this.state
+    const { lettersPressed, alphabet, wordFound } = this.state
     let array = lettersPressed
-    if (alphabet.includes(e.key) && !array.includes(e.key)) {
+    if (alphabet.includes(e.key) && !array.includes(e.key) && wordFound === undefined) {
       array.push(e.key)
       this.updateState(array)
     }
@@ -49,12 +67,16 @@ class App extends Component {
     return (
       <div className="App" >
         <div className="App-header">
+          <div className="result">
+            {(this.state.wordFound === true && <div>WIN</div>) || (this.state.wordFound === false && <div>LOOSE</div>)}
+          </div>
           <div className="hangman">
             <Hangman errorNumber={this.state.errors} />
           </div>
         </div>
         <WordToGuess lettersOfWordToGuess={this.state.wordToGuess.split('')} lettersProposed={this.state.correctLetters} />
         <IncorrectLetters letters={this.state.incorrectLetters} />
+
       </div>
     )
   }

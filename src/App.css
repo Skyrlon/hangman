@@ -8,6 +8,10 @@
   justify-content: center;
 }
 
+.result {
+  font-size: 5em;
+}
+
 .hangman {
   width: 20%;
 }
