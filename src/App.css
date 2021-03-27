@@ -30,3 +30,28 @@
   flex-direction: row;
   justify-content: space-evenly;
 }
+
+.incorrect-letters {
+  position: relative;
+  width: 10em;
+  font-size: 4em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.incorrect-letters>div {
+  position: relative;
+}
+
+.incorrect-letters>div::after {
+  content: '';
+  position: absolute;
+  top: 0.25em;
+  left: 0.20em;
+  width: 0.1em;
+  height: 1em;
+  background-color: red;
+  opacity: 0.75;
+  transform: rotate(45deg);
+}
