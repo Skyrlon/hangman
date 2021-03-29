@@ -61,25 +61,32 @@
 }
 
 .keyboard {
-  width: 20em
+  width: 20em;
+  font-size: 1.25em;
 }
 
 .keyboard>div {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: space-around;
+  align-items: center;
   border: 2px solid black;
   width: 100%;
   margin-top: 10%;
+  border-radius: 0.5em;
 }
 
-.azerty>div {
-  width: 8%;
-  border: 2px solid black;
+.keyboard .row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%;
+  margin-top: 0.5%;
+  margin-bottom: 0.5%;
 }
 
-.qwerty>div {
-  width: 8%;
-  border: 2px solid black;
+.keyboard .row div { 
+  border: 1px solid black;
+  width: 10%;
 }
