@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Hangman from './Hangman'
 import WordToGuess from './WordToGuess'
 import IncorrectLetters from './IncorrectLetters'
+import Keyboard from './Keyboard'
 import './App.css';
 
 class App extends Component {
@@ -17,10 +18,10 @@ class App extends Component {
     alphabet: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
   }
 
-  updateState = (x) => {
+  updateState = async (x) => {
     const { wordToGuess } = this.state
     const uniqueLettersOfWordToGuess = [...new Set(wordToGuess)]
-    this.setState({
+    await this.setState({
       lettersPressed: x,
       correctLetters: x.filter(letter => uniqueLettersOfWordToGuess.includes(letter)),
       incorrectLetters: x.filter(letter => !uniqueLettersOfWordToGuess.includes(letter)),
@@ -31,26 +32,34 @@ class App extends Component {
 
   statusOfTheGame = (x) => {
     const { correctLetters, incorrectLetters } = this.state
-    let win
+    let won
     if (correctLetters.length === x.length) {
-      win = true
+      won = true
     } else if (incorrectLetters.length >= 6) {
-      win = false
+      won = false
     } else {
-      win = undefined
+      won = undefined
     }
     this.setState({
-      wordFound: win,
+      wordFound: won,
     })
   }
 
-  handleKeyDown = (e) => {
+  filterLetters(e) {
     const { lettersPressed, alphabet, wordFound } = this.state
     let array = lettersPressed
-    if (alphabet.includes(e.key) && !array.includes(e.key) && wordFound === undefined) {
-      array.push(e.key)
+    if (alphabet.includes(e) && !array.includes(e) && wordFound === undefined) {
+      array.push(e)
       this.updateState(array)
     }
+  }
+
+  handleKeyDown = (e) => {
+    this.filterLetters(e.key)
+  }
+
+  handleKeyboardEvent = (key) => {
+    this.filterLetters(key)
   }
 
   componentDidMount() {
@@ -76,7 +85,7 @@ class App extends Component {
         </div>
         <WordToGuess lettersOfWordToGuess={this.state.wordToGuess.split('')} lettersProposed={this.state.correctLetters} />
         <IncorrectLetters letters={this.state.incorrectLetters} />
-
+        <Keyboard sendLetter={this.handleKeyboardEvent} />
       </div>
     )
   }

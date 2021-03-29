@@ -59,3 +59,27 @@
   opacity: 0.75;
   transform: rotate(45deg);
 }
+
+.keyboard {
+  width: 20em
+}
+
+.keyboard>div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  border: 2px solid black;
+  width: 100%;
+  margin-top: 10%;
+}
+
+.azerty>div {
+  width: 8%;
+  border: 2px solid black;
+}
+
+.qwerty>div {
+  width: 8%;
+  border: 2px solid black;
+}
