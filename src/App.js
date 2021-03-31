@@ -15,7 +15,7 @@ class App extends Component {
     correctLetters: [],
     incorrectLetters: [],
     errors: 0,
-    alphabet: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
+    alphabet: 'abcdefghijklmnopqrstuvwxyz'.split(''),
   }
 
   updateState = async (x) => {
@@ -85,7 +85,7 @@ class App extends Component {
         </div>
         <WordToGuess lettersOfWordToGuess={this.state.wordToGuess.split('')} lettersProposed={this.state.correctLetters} />
         <IncorrectLetters letters={this.state.incorrectLetters} />
-        <Keyboard sendLetter={this.handleKeyboardEvent} />
+        <Keyboard sendLetter={this.handleKeyboardEvent} lettersAlreadyProposed={this.state.lettersPressed} />
       </div>
     )
   }

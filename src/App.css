@@ -115,3 +115,7 @@
 .keyboard .row.three {
   justify-content: flex-start;
 }
+
+.keyboard .already-proposed {
+  background-color: grey
+}

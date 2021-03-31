@@ -35,13 +35,13 @@ class Keyboard extends Component {
                     {this.state.keyboards.map((keyboard) =>
                         this.state.keyboardDesign === keyboard.name && <div key={keyboard.name} className={keyboard.name}>
                             <div className="row one">
-                                {keyboard.letters.slice(0, keyboard.secondRowStart).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
+                                {keyboard.letters.slice(0, keyboard.secondRowStart).map((letter, index) => this.props.lettersAlreadyProposed.includes(letter) ? <div className="already-proposed" key={index}>{letter}</div> : <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
                             </div>
                             <div className="row two">
-                                {keyboard.letters.slice(keyboard.secondRowStart, keyboard.thirdRowStart).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
+                                {keyboard.letters.slice(keyboard.secondRowStart, keyboard.thirdRowStart).map((letter, index) => this.props.lettersAlreadyProposed.includes(letter) ? <div className="already-proposed" key={index}>{letter}</div> : <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
                             </div>
                             <div className="row three">
-                                {keyboard.letters.slice(keyboard.thirdRowStart).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
+                                {keyboard.letters.slice(keyboard.thirdRowStart).map((letter, index) => this.props.lettersAlreadyProposed.includes(letter) ? <div className="already-proposed" key={index}>{letter}</div> : <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
                             </div>
                         </div>
                     )}
