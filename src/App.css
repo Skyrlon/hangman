@@ -109,4 +109,9 @@
 .keyboard .row div {
   border: 1px solid black;
   width: 10%;
+  border-radius: 0.2em;
+}
+
+.keyboard .row.three {
+  justify-content: flex-start;
 }

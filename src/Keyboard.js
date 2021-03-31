@@ -9,11 +9,19 @@ const abcdef = 'abcdefghijklmnopqrstuvwxyz'.split('')
 class Keyboard extends Component {
     constructor(props) {
         super(props)
-        this.state = { keyboardDesign: 'azerty' }
+        this.state = {
+            keyboardDesign: 'azerty',
+            keyboards: [
+                { name: 'azerty', letters: azerty, secondRowStart: 11, thirdRowStart: 20 },
+                { name: 'qwerty', letters: qwerty, secondRowStart: 10, thirdRowStart: 19 },
+                { name: 'abcdef', letters: abcdef, secondRowStart: 11, thirdRowStart: 20 }]
+        }
     }
 
     setKeyboardDesign = (e) => {
-        this.setState({ keyboardDesign: e.target.textContent })
+        this.setState({
+            keyboardDesign: e.target.textContent,
+        })
     }
     render() {
         return (
@@ -24,39 +32,19 @@ class Keyboard extends Component {
                     <div className="keyboard-design_abcdef" onClick={this.setKeyboardDesign}>abcdef</div>
                 </div>
                 <div className="keyboard">
-                    {this.state.keyboardDesign === 'azerty' && <div className="azerty">
-                        <div className="row one">
-                            {azerty.slice(0, 11).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
+                    {this.state.keyboards.map((keyboard) =>
+                        this.state.keyboardDesign === keyboard.name && <div key={keyboard.name} className={keyboard.name}>
+                            <div className="row one">
+                                {keyboard.letters.slice(0, keyboard.secondRowStart).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
+                            </div>
+                            <div className="row two">
+                                {keyboard.letters.slice(keyboard.secondRowStart, keyboard.thirdRowStart).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
+                            </div>
+                            <div className="row three">
+                                {keyboard.letters.slice(keyboard.thirdRowStart).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
+                            </div>
                         </div>
-                        <div className="row two">
-                            {azerty.slice(11, 20).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
-                        </div>
-                        <div className="row three">
-                            {azerty.slice(20).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
-                        </div>
-                    </div>}
-                    {this.state.keyboardDesign === 'qwerty' && <div className="qwerty">
-                        <div className="row one">
-                            {qwerty.slice(0, 10).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
-                        </div>
-                        <div className="row two">
-                            {qwerty.slice(10, 19).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
-                        </div>
-                        <div className="row three">
-                            {qwerty.slice(19).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
-                        </div>
-                    </div>}
-                    {this.state.keyboardDesign === 'abcdef' && <div className="abcdef">
-                        <div className="row one">
-                            {abcdef.slice(0, 11).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
-                        </div>
-                        <div className="row two">
-                            {abcdef.slice(11, 20).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
-                        </div>
-                        <div className="row three">
-                            {abcdef.slice(20).map((letter, index) => <div onClick={() => this.props.sendLetter(letter)} key={index}>{letter}</div>)}
-                        </div>
-                    </div>}
+                    )}
                 </div>
             </div >
         )
