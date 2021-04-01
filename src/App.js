@@ -9,13 +9,13 @@ import './App.css';
 class App extends Component {
 
   state = {
-    wordToGuess: 'hangman',
+    wordToGuess: 'hangman'.toUpperCase(),
     wordFound: undefined,
     lettersPressed: [],
     correctLetters: [],
     incorrectLetters: [],
     errors: 0,
-    alphabet: 'abcdefghijklmnopqrstuvwxyz'.split(''),
+    alphabet: 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split(''),
   }
 
   updateState = async (x) => {
@@ -55,7 +55,7 @@ class App extends Component {
   }
 
   handleKeyDown = (e) => {
-    this.filterLetters(e.key)
+    this.filterLetters(e.key.toUpperCase())
   }
 
   handleKeyboardEvent = (key) => {
