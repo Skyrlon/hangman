@@ -75,13 +75,11 @@ class App extends Component {
   render() {
     return (
       <div className="App" >
-        <div className="App-header">
-          <div className="result">
-            {(this.state.wordFound === true && <div>WIN</div>) || (this.state.wordFound === false && <div>LOOSE</div>)}
-          </div>
-          <div className="hangman">
-            <Hangman errorNumber={this.state.errors} />
-          </div>
+        {(this.state.wordFound === true || this.state.wordFound === false) && <div className="result">
+          {(this.state.wordFound === true && <div>You Won<br />The word was {this.state.wordToGuess}</div>) || (this.state.wordFound === false && <div>Game Over<br /> The word was {this.state.wordToGuess}</div>)}
+        </div>}
+        <div className="hangman">
+          <Hangman errorNumber={this.state.errors} />
         </div>
         <WordToGuess lettersOfWordToGuess={this.state.wordToGuess.split('')} lettersProposed={this.state.correctLetters} />
         <IncorrectLetters letters={this.state.incorrectLetters} />
