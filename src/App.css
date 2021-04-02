@@ -16,7 +16,7 @@
   z-index: 1;
   background-color: rgb(255, 255, 255, 0.9);
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -26,6 +26,7 @@
   border-radius: 1em;
   padding: 1em;
   background: white;
+  margin-top: 1em;
 }
 
 .hangman {

@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRedoAlt } from '@fortawesome/free-solid-svg-icons'
 
 import Hangman from './Hangman'
 import WordToGuess from './WordToGuess'
@@ -62,6 +64,16 @@ class App extends Component {
     this.filterLetters(key)
   }
 
+  resetGame = () => {
+    this.setState({
+      wordFound: undefined,
+      lettersPressed: [],
+      correctLetters: [],
+      incorrectLetters: [],
+      errors: 0,
+    })
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', (e) => {
       this.handleKeyDown(e)
@@ -77,6 +89,7 @@ class App extends Component {
       <div className="App" >
         {(this.state.wordFound === true || this.state.wordFound === false) && <div className="result">
           {(this.state.wordFound === true && <div>You Won<br />The word was {this.state.wordToGuess}</div>) || (this.state.wordFound === false && <div>Game Over<br /> The word was {this.state.wordToGuess}</div>)}
+          <div onClick={this.resetGame}>Play again ? <br /><FontAwesomeIcon icon={faRedoAlt} /></div>
         </div>}
         <div className="hangman">
           <Hangman errorNumber={this.state.errors} />
