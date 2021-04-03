@@ -8,10 +8,13 @@ import IncorrectLetters from './IncorrectLetters'
 import Keyboard from './Keyboard'
 import './App.css';
 
+const randomWords = require('random-words')
+
+
 class App extends Component {
 
   state = {
-    wordToGuess: 'hangman'.toUpperCase(),
+    wordToGuess: randomWords().toUpperCase(),
     wordFound: undefined,
     lettersPressed: [],
     correctLetters: [],
@@ -56,7 +59,7 @@ class App extends Component {
     }
   }
 
-  handleKeyDown = (e) => {
+  handleKeyDown(e) {
     this.filterLetters(e.key.toUpperCase())
   }
 
@@ -66,6 +69,7 @@ class App extends Component {
 
   resetGame = () => {
     this.setState({
+      wordToGuess: randomWords().toUpperCase(),
       wordFound: undefined,
       lettersPressed: [],
       correctLetters: [],
