@@ -20,6 +20,7 @@ class App extends Component {
     correctLetters: [],
     incorrectLetters: [],
     errors: 0,
+    winCounter: 0,
     alphabet: 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split(''),
   }
 
@@ -36,18 +37,24 @@ class App extends Component {
   }
 
   statusOfTheGame = (x) => {
-    const { correctLetters, incorrectLetters } = this.state
+    const { correctLetters, incorrectLetters, winCounter } = this.state
     let won
     if (correctLetters.length === x.length) {
       won = true
+      this.updateWinCounter(winCounter + 1)
     } else if (incorrectLetters.length >= 6) {
       won = false
+      this.updateWinCounter(0)
     } else {
       won = undefined
     }
     this.setState({
       wordFound: won,
     })
+  }
+
+  updateWinCounter(value) {
+    this.setState({ winCounter: value })
   }
 
   filterLetters(e) {
@@ -91,6 +98,7 @@ class App extends Component {
   render() {
     return (
       <div className="App" >
+        <div className="win-counter">Chain Win : {this.state.winCounter}</div>
         {(this.state.wordFound === true || this.state.wordFound === false) && <div className="result">
           {(this.state.wordFound === true && <div>You Won<br />The word was {this.state.wordToGuess}</div>) || (this.state.wordFound === false && <div>Game Over<br /> The word was {this.state.wordToGuess}</div>)}
           <div onClick={this.resetGame}>Play again ? <br /><FontAwesomeIcon icon={faRedoAlt} /></div>
