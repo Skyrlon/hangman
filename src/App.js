@@ -14,7 +14,7 @@ const randomWords = require('random-words')
 class App extends Component {
 
   state = {
-    wordToGuess: randomWords().toUpperCase(),
+    wordToGuess: '',
     wordFound: undefined,
     lettersPressed: [],
     correctLetters: [],
@@ -24,16 +24,23 @@ class App extends Component {
     alphabet: 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split(''),
   }
 
+  uniqueLettersOfWordToGuess() {
+    let { wordToGuess } = this.state
+    return [...new Set(wordToGuess)]
+  }
+
   updateState = async (x) => {
-    const { wordToGuess } = this.state
-    const uniqueLettersOfWordToGuess = [...new Set(wordToGuess)]
-    await this.setState({
+    this.setState({
       lettersPressed: x,
-      correctLetters: x.filter(letter => uniqueLettersOfWordToGuess.includes(letter)),
-      incorrectLetters: x.filter(letter => !uniqueLettersOfWordToGuess.includes(letter)),
-      errors: x.filter(letter => !uniqueLettersOfWordToGuess.includes(letter)).length
+      correctLetters: x.filter(letter => this.uniqueLettersOfWordToGuess().includes(letter)),
+      incorrectLetters: x.filter(letter => !this.uniqueLettersOfWordToGuess().includes(letter)),
+      errors: x.filter(letter => !this.uniqueLettersOfWordToGuess().includes(letter)).length
     })
-    this.statusOfTheGame(uniqueLettersOfWordToGuess)
+    sessionStorage.setItem('lettersPressed', x)
+    sessionStorage.setItem('correctLetters', x.filter(letter => this.uniqueLettersOfWordToGuess().includes(letter)))
+    sessionStorage.setItem('incorrectLetters', x.filter(letter => !this.uniqueLettersOfWordToGuess().includes(letter)))
+    await sessionStorage.setItem('errors', x.filter(letter => !this.uniqueLettersOfWordToGuess().includes(letter)).length)
+    this.statusOfTheGame(this.uniqueLettersOfWordToGuess())
   }
 
   statusOfTheGame = (x) => {
@@ -51,6 +58,7 @@ class App extends Component {
     this.setState({
       wordFound: won,
     })
+    sessionStorage.setItem('wordFound', won)
   }
 
   updateWinCounter(value) {
@@ -74,18 +82,42 @@ class App extends Component {
     this.filterLetters(key)
   }
 
-  resetGame = () => {
-    this.setState({
-      wordToGuess: randomWords().toUpperCase(),
+  resetGame = async () => {
+    let word = randomWords().toUpperCase()
+    sessionStorage.clear()
+    await this.setState({
+      wordToGuess: word,
       wordFound: undefined,
       lettersPressed: [],
       correctLetters: [],
       incorrectLetters: [],
       errors: 0,
     })
+    sessionStorage.setItem('wordToGuess', word)
+  }
+
+  async loadState() {
+    await this.setState({
+      wordToGuess: sessionStorage.getItem('wordToGuess').length > 0 ? sessionStorage.getItem('wordToGuess') : randomWords().toUpperCase(),
+      lettersPressed: sessionStorage.getItem('lettersPressed') ? sessionStorage.getItem('lettersPressed').split(',') : [],
+      correctLetters: sessionStorage.getItem('correctLetters') ? sessionStorage.getItem('correctLetters').split(',') : [],
+      incorrectLetters: sessionStorage.getItem('incorrectLetters') ? sessionStorage.getItem('incorrectLetters').split(',') : [],
+      errors: sessionStorage.getItem('errors') > 0 ? parseInt(sessionStorage.getItem('errors')) : 0,
+      wordFound: sessionStorage.getItem('wordFound') ? sessionStorage.getItem('wordFound') : undefined,
+    })
+    this.statusOfTheGame(this.uniqueLettersOfWordToGuess())
   }
 
   componentDidMount() {
+    if (sessionStorage.length > 0) {
+      this.loadState()
+    } else {
+      const word = randomWords().toUpperCase()
+      this.setState({
+        wordToGuess: word,
+      })
+      sessionStorage.setItem('wordToGuess', word)
+    }
     document.addEventListener('keydown', (e) => {
       this.handleKeyDown(e)
     })
