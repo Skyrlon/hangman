@@ -63,6 +63,7 @@ class App extends Component {
 
   updateWinCounter(value) {
     this.setState({ winCounter: value })
+    sessionStorage.setItem('winCounter', value)
   }
 
   filterLetters(e) {
@@ -84,7 +85,10 @@ class App extends Component {
 
   resetGame = async () => {
     let word = randomWords().toUpperCase()
-    sessionStorage.clear()
+    sessionStorage.setItem('lettersPressed', '')
+    sessionStorage.setItem('correctLetters', '')
+    sessionStorage.setItem('incorrectLetters', '')
+    sessionStorage.setItem('errors', '')
     await this.setState({
       wordToGuess: word,
       wordFound: undefined,
@@ -92,6 +96,7 @@ class App extends Component {
       correctLetters: [],
       incorrectLetters: [],
       errors: 0,
+      winCounter: sessionStorage.getItem('winCounter')
     })
     sessionStorage.setItem('wordToGuess', word)
   }
@@ -102,10 +107,11 @@ class App extends Component {
       lettersPressed: sessionStorage.getItem('lettersPressed') ? sessionStorage.getItem('lettersPressed').split(',') : [],
       correctLetters: sessionStorage.getItem('correctLetters') ? sessionStorage.getItem('correctLetters').split(',') : [],
       incorrectLetters: sessionStorage.getItem('incorrectLetters') ? sessionStorage.getItem('incorrectLetters').split(',') : [],
-      errors: sessionStorage.getItem('errors') > 0 ? parseInt(sessionStorage.getItem('errors')) : 0,
+      errors: parseInt(sessionStorage.getItem('errors')) > 0 ? parseInt(sessionStorage.getItem('errors')) : 0,
       wordFound: sessionStorage.getItem('wordFound') ? sessionStorage.getItem('wordFound') : undefined,
     })
     this.statusOfTheGame(this.uniqueLettersOfWordToGuess())
+    this.updateWinCounter(parseInt(sessionStorage.getItem('winCounter')) > 0 ? parseInt(sessionStorage.getItem('winCounter')) : 0)
   }
 
   componentDidMount() {
