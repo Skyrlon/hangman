@@ -21,6 +21,7 @@ class App extends Component {
     incorrectLetters: [],
     errors: 0,
     winCounter: 0,
+    winRecord: 0,
     alphabet: 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split(''),
   }
 
@@ -66,6 +67,11 @@ class App extends Component {
     sessionStorage.setItem('winCounter', value)
   }
 
+  updateWinRecord(value) {
+    this.setState({ winRecord: value })
+    localStorage.setItem('winRecord', value)
+  }
+
   filterLetters(e) {
     const { lettersPressed, alphabet, wordFound } = this.state
     let array = lettersPressed
@@ -96,9 +102,12 @@ class App extends Component {
       correctLetters: [],
       incorrectLetters: [],
       errors: 0,
-      winCounter: sessionStorage.getItem('winCounter')
+      winCounter: parseInt(sessionStorage.getItem('winCounter'))
     })
-    sessionStorage.setItem('wordToGuess', word)
+    await sessionStorage.setItem('wordToGuess', word)
+    if (this.state.winCounter > this.state.winRecord) {
+      this.updateWinRecord(this.state.winCounter)
+    }
   }
 
   async loadState() {
@@ -111,10 +120,11 @@ class App extends Component {
       wordFound: sessionStorage.getItem('wordFound') ? sessionStorage.getItem('wordFound') : undefined,
     })
     this.statusOfTheGame(this.uniqueLettersOfWordToGuess())
-    this.updateWinCounter(parseInt(sessionStorage.getItem('winCounter')) > 0 ? parseInt(sessionStorage.getItem('winCounter')) : 0)
+    await this.updateWinCounter(parseInt(sessionStorage.getItem('winCounter')) > 0 ? parseInt(sessionStorage.getItem('winCounter')) : 0)
   }
 
   componentDidMount() {
+    this.setState({ winRecord: parseInt(localStorage.getItem('winRecord')) > 0 ? parseInt(localStorage.getItem('winRecord')) : 0 })
     if (sessionStorage.length > 0) {
       this.loadState()
     } else {
@@ -136,6 +146,7 @@ class App extends Component {
   render() {
     return (
       <div className="App" >
+        <div className="win-record">Record : {this.state.winRecord}</div>
         <div className="win-counter">Chain Win : {this.state.winCounter}</div>
         {(this.state.wordFound === true || this.state.wordFound === false) && <div className="result">
           {(this.state.wordFound === true && <div>You Won<br />The word was {this.state.wordToGuess}</div>) || (this.state.wordFound === false && <div>Game Over<br /> The word was {this.state.wordToGuess}</div>)}
