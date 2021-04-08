@@ -7,6 +7,8 @@ import WordToGuess from './WordToGuess'
 import IncorrectLetters from './IncorrectLetters'
 import Keyboard from './Keyboard'
 import './App.css';
+import EnglishFlag from './EnglishFlag.js'
+import FrenchFlag from './FrenchFlag.js'
 
 const randomWords = require('random-words')
 
@@ -14,6 +16,7 @@ const randomWords = require('random-words')
 class App extends Component {
 
   state = {
+    language: 'en',
     wordToGuess: '',
     wordFound: undefined,
     lettersPressed: [],
@@ -89,6 +92,11 @@ class App extends Component {
     this.filterLetters(key)
   }
 
+  changeLanguage(x) {
+    this.setState({ language: x })
+    localStorage.setItem('language', x)
+  }
+
   resetGame = async () => {
     let word = randomWords().toUpperCase()
     sessionStorage.setItem('lettersPressed', '')
@@ -124,7 +132,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({ winRecord: parseInt(localStorage.getItem('winRecord')) > 0 ? parseInt(localStorage.getItem('winRecord')) : 0 })
+    this.setState({
+      winRecord: parseInt(localStorage.getItem('winRecord')) > 0 ? parseInt(localStorage.getItem('winRecord')) : 0,
+      language: 'language' in localStorage ? localStorage.getItem('language') : 'en'
+    })
     if (sessionStorage.length > 0) {
       this.loadState()
     } else {
@@ -146,6 +157,14 @@ class App extends Component {
   render() {
     return (
       <div className="App" >
+        <div className="flags">
+          <div className="flags_en" onClick={() => { this.changeLanguage('en') }}>
+            <EnglishFlag active={this.state.language === 'en'} />
+          </div>
+          <div className="flags_fr" onClick={() => { this.changeLanguage('fr') }}>
+            <FrenchFlag active={this.state.language === 'fr'} />
+          </div>
+        </div>
         <div className="win-record">Record : {this.state.winRecord}</div>
         <div className="win-counter">Chain Win : {this.state.winCounter}</div>
         {(this.state.wordFound === true || this.state.wordFound === false) && <div className="result">
