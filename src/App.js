@@ -10,7 +10,22 @@ import './App.css';
 import EnglishFlag from './EnglishFlag.js'
 import FrenchFlag from './FrenchFlag.js'
 
+
 const randomWords = require('random-words')
+
+const words = require('an-array-of-french-words')
+
+const randomWordsFR = function getRandomFrenchWord() {
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('')
+  const randomIndex = Math.ceil(Math.random() * words.length)
+  const randomFrenchWord = words[randomIndex]
+  if (randomFrenchWord.split('').every(element => alphabet.includes(element)) && randomFrenchWord.length > 2) {
+    return randomFrenchWord
+  }
+  else {
+    return getRandomFrenchWord()
+  }
+}
 
 
 class App extends Component {
@@ -92,9 +107,10 @@ class App extends Component {
     this.filterLetters(key)
   }
 
-  changeLanguage(x) {
+  async changeLanguage(x) {
     this.setState({ language: x })
-    localStorage.setItem('language', x)
+    await localStorage.setItem('language', x)
+    this.resetGame()
   }
 
   resetGame = async () => {
@@ -132,6 +148,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    console.log(randomWordsFR())
     this.setState({
       winRecord: parseInt(localStorage.getItem('winRecord')) > 0 ? parseInt(localStorage.getItem('winRecord')) : 0,
       language: 'language' in localStorage ? localStorage.getItem('language') : 'en'
