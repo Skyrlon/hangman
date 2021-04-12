@@ -10,23 +10,8 @@ import './App.css';
 import EnglishFlag from './EnglishFlag.js'
 import FrenchFlag from './FrenchFlag.js'
 
-
-const randomWords = require('random-words')
-
-const words = require('an-array-of-french-words')
-
-const randomWordsFR = function getRandomFrenchWord() {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('')
-  const randomIndex = Math.ceil(Math.random() * words.length)
-  const randomFrenchWord = words[randomIndex]
-  if (randomFrenchWord.split('').every(element => alphabet.includes(element)) && randomFrenchWord.length > 2) {
-    return randomFrenchWord
-  }
-  else {
-    return getRandomFrenchWord()
-  }
-}
-
+const wordsEN = require('an-array-of-english-words')
+const wordsFR = require('an-array-of-french-words')
 
 class App extends Component {
 
@@ -41,6 +26,18 @@ class App extends Component {
     winCounter: 0,
     winRecord: 0,
     alphabet: 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split(''),
+  }
+
+  getRandomWord(language) {
+    const wordsArray = language === 'en' ? wordsEN : wordsFR
+    const randomIndex = Math.ceil(Math.random() * wordsArray.length)
+    const randomWord = wordsArray[randomIndex]
+    if (randomWord.split('').every(element => this.state.alphabet.includes(element.toUpperCase())) && randomWord.length > 2) {
+      return randomWord
+    }
+    else {
+      return this.getRandomWord(language)
+    }
   }
 
   uniqueLettersOfWordToGuess() {
@@ -110,11 +107,12 @@ class App extends Component {
   async changeLanguage(x) {
     this.setState({ language: x })
     await localStorage.setItem('language', x)
+    this.updateWinCounter(0)
     this.resetGame()
   }
 
   resetGame = async () => {
-    let word = randomWords().toUpperCase()
+    let word = this.getRandomWord(this.state.language).toUpperCase()
     sessionStorage.setItem('lettersPressed', '')
     sessionStorage.setItem('correctLetters', '')
     sessionStorage.setItem('incorrectLetters', '')
@@ -136,7 +134,7 @@ class App extends Component {
 
   async loadState() {
     await this.setState({
-      wordToGuess: sessionStorage.getItem('wordToGuess').length > 0 ? sessionStorage.getItem('wordToGuess') : randomWords().toUpperCase(),
+      wordToGuess: sessionStorage.getItem('wordToGuess').length > 0 ? sessionStorage.getItem('wordToGuess') : this.getRandomWord(this.state.language).toUpperCase(),
       lettersPressed: sessionStorage.getItem('lettersPressed') ? sessionStorage.getItem('lettersPressed').split(',') : [],
       correctLetters: sessionStorage.getItem('correctLetters') ? sessionStorage.getItem('correctLetters').split(',') : [],
       incorrectLetters: sessionStorage.getItem('incorrectLetters') ? sessionStorage.getItem('incorrectLetters').split(',') : [],
@@ -148,7 +146,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log(randomWordsFR())
     this.setState({
       winRecord: parseInt(localStorage.getItem('winRecord')) > 0 ? parseInt(localStorage.getItem('winRecord')) : 0,
       language: 'language' in localStorage ? localStorage.getItem('language') : 'en'
@@ -156,7 +153,7 @@ class App extends Component {
     if (sessionStorage.length > 0) {
       this.loadState()
     } else {
-      const word = randomWords().toUpperCase()
+      let word = this.getRandomWord(this.state.language).toUpperCase()
       this.setState({
         wordToGuess: word,
       })
