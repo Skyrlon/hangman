@@ -18,12 +18,14 @@ class App extends Component {
   state = {
     language: 'en',
     wordToGuess: '',
+    definition: '',
     wordFound: undefined,
     lettersPressed: [],
     correctLetters: [],
     incorrectLetters: [],
     errors: 0,
     winCounter: 0,
+    warnWinReset: false,
     winRecord: 0,
     alphabet: 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split(''),
   }
@@ -104,9 +106,18 @@ class App extends Component {
     this.filterLetters(key)
   }
 
-  async changeLanguage(x) {
-    this.setState({ language: x })
-    await localStorage.setItem('language', x)
+  askChangeLanguage(x) {
+    if (this.state.winCounter > 0) {
+      this.setState({ warnWinReset: true })
+    }
+    else {
+      this.changeLanguage()
+    }
+  }
+
+  async changeLanguage() {
+    await this.setState({ language: this.state.language === 'en' ? 'fr' : 'en' })
+    await localStorage.setItem('language', this.state.language)
     this.updateWinCounter(0)
     this.resetGame()
   }
@@ -172,18 +183,26 @@ class App extends Component {
     return (
       <div className="App" >
         <div className="flags">
-          <div className="flags_en" onClick={() => { this.changeLanguage('en') }}>
+          <div className="flags_en" onClick={() => { this.askChangeLanguage() }}>
             <EnglishFlag active={this.state.language === 'en'} />
           </div>
-          <div className="flags_fr" onClick={() => { this.changeLanguage('fr') }}>
+          <div className="flags_fr" onClick={() => { this.askChangeLanguage() }}>
             <FrenchFlag active={this.state.language === 'fr'} />
           </div>
         </div>
         <div className="win-record">Record : {this.state.winRecord}</div>
         <div className="win-counter">Chain Win : {this.state.winCounter}</div>
         {(this.state.wordFound === true || this.state.wordFound === false) && <div className="result">
-          {(this.state.wordFound === true && <div>You Won<br />The word was {this.state.wordToGuess}</div>) || (this.state.wordFound === false && <div>Game Over<br /> The word was {this.state.wordToGuess}</div>)}
+          <div>
+            {(this.state.wordFound === true && <div>You Won</div>) || (this.state.wordFound === false && <div>Game Over</div>)}
+            <div>The word was {this.state.wordToGuess}</div>
+          </div>
           <div onClick={this.resetGame}>Play again ? <br /><FontAwesomeIcon icon={faRedoAlt} /></div>
+        </div>}
+        {this.state.warnWinReset === true && <div className="warn-win-reset">
+          <div>Your Chain Win will reset if switch language</div>
+          <div onClick={() => { this.setState({ warnWinReset: false }); this.changeLanguage() }}>Switch Language anyway</div>
+          <div onClick={() => this.setState({ warnWinReset: false })}>Cancel</div>
         </div>}
         <div className="hangman">
           <Hangman errorNumber={this.state.errors} />

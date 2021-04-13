@@ -45,7 +45,16 @@
   align-items: center;
 }
 
-.result div {
+.result>div {
+  border: 5px solid black;
+  border-radius: 1em;
+  padding: 1em;
+  background: white;
+  margin-top: 1em;
+}
+
+.warn-win-reset {
+  position: absolute;
   border: 5px solid black;
   border-radius: 1em;
   padding: 1em;
