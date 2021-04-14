@@ -192,17 +192,21 @@ class App extends Component {
         </div>
         <div className="win-record">Record : {this.state.winRecord}</div>
         <div className="win-counter">Chain Win : {this.state.winCounter}</div>
-        {(this.state.wordFound === true || this.state.wordFound === false) && <div className="result">
-          <div>
-            {(this.state.wordFound === true && <div>You Won</div>) || (this.state.wordFound === false && <div>Game Over</div>)}
-            <div>The word was {this.state.wordToGuess}</div>
-          </div>
-          <div onClick={this.resetGame}>Play again ? <br /><FontAwesomeIcon icon={faRedoAlt} /></div>
-        </div>}
-        {this.state.warnWinReset === true && <div className="warn-win-reset">
-          <div>Your Chain Win will reset if switch language</div>
-          <div onClick={() => { this.setState({ warnWinReset: false }); this.changeLanguage() }}>Switch Language anyway</div>
-          <div onClick={() => this.setState({ warnWinReset: false })}>Cancel</div>
+        {(this.state.wordFound === true || this.state.wordFound === false || this.state.warnWinReset === true) && <div className="warn-screen">
+          {(this.state.wordFound === true || this.state.wordFound === false) && <div className="game-result">
+            <div>
+              {(this.state.wordFound === true && <div>You Won</div>) || (this.state.wordFound === false && <div>Game Over</div>)}
+              <div>The word was {this.state.wordToGuess}</div>
+            </div>
+            <div onClick={this.resetGame}>Play again ? <br /><FontAwesomeIcon icon={faRedoAlt} /></div>
+          </div>}
+          {this.state.warnWinReset === true && <div className="warn-chain-win-reset">
+            <div>Your chain win will reset if you switch language now !</div>
+            <div className="warn-chain-win-reset_choices">
+              <div onClick={() => { this.setState({ warnWinReset: false }); this.changeLanguage() }}>Switch Language anyway</div>
+              <div onClick={() => this.setState({ warnWinReset: false })}>Cancel</div>
+            </div>
+          </div>}
         </div>}
         <div className="hangman">
           <Hangman errorNumber={this.state.errors} />
@@ -210,7 +214,7 @@ class App extends Component {
         <WordToGuess lettersOfWordToGuess={this.state.wordToGuess.split('')} lettersProposed={this.state.correctLetters} />
         <IncorrectLetters letters={this.state.incorrectLetters} />
         <Keyboard sendLetter={this.handleKeyboardEvent} lettersAlreadyProposed={this.state.lettersPressed} />
-      </div>
+      </div >
     )
   }
 }
