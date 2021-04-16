@@ -32,6 +32,12 @@
   font-size: 2em;
 }
 
+.warn-screen-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .warn-screen {
   position: absolute;
   font-size: 2em;

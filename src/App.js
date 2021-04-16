@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRedoAlt } from '@fortawesome/free-solid-svg-icons'
 
 import Hangman from './Hangman'
 import WordToGuess from './WordToGuess'
@@ -9,6 +7,7 @@ import Keyboard from './Keyboard'
 import './App.css';
 import EnglishFlag from './EnglishFlag.js'
 import FrenchFlag from './FrenchFlag.js'
+import WarnScreen from './WarnScreen.js'
 
 const wordsEN = require('an-array-of-english-words')
 const wordsFR = require('an-array-of-french-words')
@@ -192,22 +191,7 @@ class App extends Component {
         </div>
         <div className="win-record">Record : {this.state.winRecord}</div>
         <div className="win-counter">Chain Win : {this.state.winCounter}</div>
-        {(this.state.wordFound === true || this.state.wordFound === false || this.state.warnWinReset === true) && <div className="warn-screen">
-          {(this.state.wordFound === true || this.state.wordFound === false) && <div className="game-result">
-            <div>
-              {(this.state.wordFound === true && <div>You Won</div>) || (this.state.wordFound === false && <div>Game Over</div>)}
-              <div>The word was {this.state.wordToGuess}</div>
-            </div>
-            <div onClick={this.resetGame}>Play again ? <br /><FontAwesomeIcon icon={faRedoAlt} /></div>
-          </div>}
-          {this.state.warnWinReset === true && <div className="warn-chain-win-reset">
-            <div>Your chain win will reset if you switch language now !</div>
-            <div className="warn-chain-win-reset_choices">
-              <div onClick={() => { this.setState({ warnWinReset: false }); this.changeLanguage() }}>Switch Language anyway</div>
-              <div onClick={() => this.setState({ warnWinReset: false })}>Cancel</div>
-            </div>
-          </div>}
-        </div>}
+        <WarnScreen wordFound={this.state.wordFound} warnWinReset={this.state.warnWinReset} word={this.state.wordToGuess} playAgain={this.resetGame} acceptSwitchLanguage={() => { this.setState({ warnWinReset: false }); this.changeLanguage() }} cancelSwitchLanguage={() => this.setState({ warnWinReset: false })} />
         <div className="hangman">
           <Hangman errorNumber={this.state.errors} />
         </div>
