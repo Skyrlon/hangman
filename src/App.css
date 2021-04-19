@@ -15,7 +15,7 @@
 }
 
 .flags div {
-  width: 4em
+  width: 4em;
 }
 
 .win-counter {
@@ -51,7 +51,7 @@
   align-items: center;
 }
 
-.game-result>div {
+.game-result > div {
   border: 5px solid black;
   border-radius: 1em;
   padding: 1em;
@@ -76,14 +76,13 @@
   justify-content: space-around;
 }
 
-.warn-chain-win-reset_choices>div {
+.warn-chain-win-reset_choices > div {
   cursor: pointer;
   margin-top: 1em;
   border-radius: 0.5em;
   padding: 0.2em;
   border: 5px solid black;
 }
-
 
 .hangman {
   width: 20%;
@@ -106,15 +105,15 @@
   justify-content: space-evenly;
 }
 
-.incorrect-letters>div {
+.incorrect-letters > div {
   position: relative;
 }
 
-.incorrect-letters>div::after {
-  content: '';
+.incorrect-letters > div::after {
+  content: "";
   position: absolute;
   top: 0.25em;
-  left: 0.20em;
+  left: 0.2em;
   width: 0.1em;
   height: 1em;
   background-color: red;
@@ -136,7 +135,7 @@
   align-items: center;
 }
 
-.keyboard-design>div {
+.keyboard-design > div {
   width: 4em;
   font-size: 1.25em;
   border: 2px solid black;
@@ -148,7 +147,7 @@
   font-size: 1.25em;
 }
 
-.keyboard>div {
+.keyboard > div {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -179,5 +178,47 @@
 }
 
 .keyboard .already-proposed {
-  background-color: grey
+  background-color: grey;
+}
+
+.App.dark {
+  background-color: black;
+  color: white;
+}
+
+.App.dark .hangman svg > rect {
+  fill: white;
+}
+
+.App.dark .hangman svg > circle {
+  stroke: white;
+}
+
+.App.dark .keyboard > div {
+  border: 2px solid white;
+}
+
+.App.dark .keyboard-design > div {
+  border: 2px solid white;
+}
+
+.App.dark .keyboard .row div {
+  border: 1px solid white;
+}
+
+.App.dark .warn-screen {
+  background: rgb(0, 0, 0, 0.9);
+}
+
+.App.dark .game-result > div {
+  border: 5px solid white;
+  background: black;
+}
+
+.App.dark .warn-chain-win-reset {
+  border: 5px solid white;
+}
+
+.App.dark .warn-chain-win-reset_choices > div {
+  border: 5px solid white;
 }

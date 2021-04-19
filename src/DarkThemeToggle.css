@@ -1,0 +1,33 @@
+.toggle {
+  --on-color: dimgrey;
+  --off-color: lightgrey;
+  --on-knob-color: black;
+  --off-knob-color: white;
+  --linecap: round;
+  --anim-time: 0.3s;
+  position: absolute;
+  top: 7em;
+  left: 1em;
+  width: 3em;
+}
+
+.toggle > * {
+  transition: all var(--anim-time) ease;
+}
+
+.toggle > .knob {
+  stroke: var(--off-knob-color);
+}
+
+.toggle > .switch {
+  stroke: var(--off-color);
+}
+
+.toggle.on > .knob {
+  stroke: var(--on-knob-color);
+  transform: translateX(20px);
+}
+
+.toggle.on > .switch {
+  stroke: var(--on-color);
+}
