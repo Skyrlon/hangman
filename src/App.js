@@ -205,6 +205,10 @@ class App extends Component {
           : 0,
       language:
         "language" in localStorage ? localStorage.getItem("language") : "en",
+      darktheme:
+        "darktheme" in localStorage
+          ? localStorage.getItem("darktheme") === "true" //convert string to boolean
+          : false,
     });
     if (sessionStorage.length > 0) {
       this.loadState();
@@ -229,9 +233,10 @@ class App extends Component {
       <div className={`App ${this.state.darktheme ? "dark" : ""}`}>
         <DarkThemeToggle
           on={this.state.darktheme}
-          toggleDarkTheme={() =>
-            this.setState({ darktheme: !this.state.darktheme })
-          }
+          toggleDarkTheme={async () => {
+            await this.setState({ darktheme: !this.state.darktheme });
+            localStorage.setItem("darktheme", this.state.darktheme);
+          }}
         />
         <div className="flags">
           <div
